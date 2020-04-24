@@ -1,4 +1,4 @@
-package com.konto.konto.OpenBankingApi;
+package com.konto.konto.keystore;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ResourceUtils;
@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.security.KeyStore;
 
 @RequiredArgsConstructor
-public class OpenBankingUtil {
+public class KeyStoreUtil {
 
     public static KeyStore loadKeyStore(String location, String password) throws Exception {
         try (

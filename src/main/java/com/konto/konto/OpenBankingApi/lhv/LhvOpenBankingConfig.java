@@ -1,11 +1,13 @@
-package com.konto.konto.OpenBankingApi.providers.lhv;
+package com.konto.konto.OpenBankingApi.lhv;
 
-import com.konto.konto.OpenBankingApi.OpenBankingUtil;
+import com.konto.konto.keystore.KeyStoreUtil;
+import lombok.RequiredArgsConstructor;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -13,6 +15,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import javax.net.ssl.SSLContext;
 import java.security.KeyStore;
 
+@Configuration
 public class LhvOpenBankingConfig {
 
     private final String keyStoreLocation = "classpath:certs/lhv-combined.jks";
@@ -22,7 +25,7 @@ public class LhvOpenBankingConfig {
 
     @Bean
     public RestTemplate lhvRestTemplate() throws Exception {
-        final KeyStore keyStore = OpenBankingUtil.loadKeyStore(keyStoreLocation, keyStorePassword);
+        final KeyStore keyStore = KeyStoreUtil.loadKeyStore(keyStoreLocation, keyStorePassword);
 
         SSLContext sslContext = new SSLContextBuilder()
                 .loadKeyMaterial(keyStore, keyStorePassword.toCharArray())
