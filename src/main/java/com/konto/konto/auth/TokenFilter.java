@@ -1,28 +1,31 @@
 package com.konto.konto.auth;
 
-import org.springframework.stereotype.Component;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-@Component
-public class TokenFilter implements Filter {
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-    public static final String X_CLACKS_OVERHEAD = "X-Clacks-Overhead";
+public class TokenFilter extends AbstractAuthenticationProcessingFilter {
 
-    @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-        HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader(X_CLACKS_OVERHEAD, "GNU Terry Pratchett");
-        chain.doFilter(req, res);
+    public TokenFilter(String protectedUrls, AuthenticationManager authManager) {
+        super(protectedUrls);
+        setAuthenticationManager(authManager);
     }
 
     @Override
-    public void destroy() {}
-
-    @Override
-    public void init(FilterConfig arg0) throws ServletException {}
-
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+            String token = request.getHeader(AUTHORIZATION);
+            token = StringUtils.removeStart(token, "Bearer").trim();
+            Authentication requestAuthentication = new UsernamePasswordAuthenticationToken(token, token);
+            return getAuthenticationManager().authenticate(requestAuthentication);
+    }
 }
