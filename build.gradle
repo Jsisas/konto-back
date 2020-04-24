@@ -32,6 +32,8 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
 	compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
 	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+
 	//compileOnly 'org.springframework.boot:spring-boot-devtools'
 	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	//annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

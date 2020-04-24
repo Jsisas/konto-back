@@ -3,9 +3,7 @@ package com.konto.konto.OpenBankingApi.providers.lhv;
 import com.konto.konto.OpenBankingApi.OpenBankingProviders;
 import com.konto.konto.OpenBankingApi.OpenBankingRestService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -13,8 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.reactive.function.BodyInserters;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
@@ -25,38 +22,29 @@ import static org.springframework.web.reactive.function.BodyInserters.fromFormDa
 @RequestMapping(path = "/api/openbanking/lhv")
 public class LhvOpenBankingController {
 
-    private final OpenBankingRestService openBankingRestService;
+    private final RestTemplate lhvRestTemplate;
 
     @ResponseBody
     @GetMapping("/auth/redirect")
-    public ResponseEntity<Mono<String>> auth(
+    public ResponseEntity<String> auth(
             @RequestParam(value = "code") String code,
-            @RequestParam(value = "state") OpenBankingProviders provider) {
+            @RequestParam(value = "state") String provider) {
 
+        if(provider.equals("UNFINISHED")){
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            headers.set("Authorization", "Bearer liismarimannik");
 
+            MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+            formData.add("client_id", OpenBankingRestService.CLIENT_ID);
+            formData.add("code", code);
+            formData.add("grant_type", "authorization_code");
+            formData.add("redirect_uri", "https://localhost:8443/api/openbanking/lhv/auth/redirect");
 
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("client_id", openBankingRestService.CLIENT_ID);
-        formData.add("code", code);
-        formData.add("grant_type", "authorization_code");
-        formData.add("redirect_uri", "http://localhost:8080/api/openbanking/lhv/auth/redirect&state=LHV");
-
-        Mono<String> result = openBankingRestService.getOpenBankingRestService()
-                .method(HttpMethod.POST)
-                .uri("/oauth/token")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body( BodyInserters.fromFormData(formData))
-                .accept( MediaType.APPLICATION_JSON )
-                .retrieve()
-                .bodyToMono(String.class);
-
-        return ResponseEntity.ok(result);
-    }
-
-    @ResponseBody
-    @GetMapping("/auth/redirectFinish")
-    public ResponseEntity<Map<String, Object>> auth(@RequestParam(value = "code") String code) {
-        return ResponseEntity.ok(Map.of("ok", code));
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(formData, headers);
+            return lhvRestTemplate.postForEntity( "/oauth/token", request , String.class );
+        }
+        return ResponseEntity.ok(provider);
     }
 
     @ResponseBody
