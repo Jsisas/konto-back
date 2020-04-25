@@ -1,15 +1,17 @@
-package com.konto.konto.auth;
+package com.konto.konto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class User {
 
-    private String id;
+    private Integer id;
     private String fname;
     private String lname;
 
