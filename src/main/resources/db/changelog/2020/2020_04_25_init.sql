@@ -13,3 +13,15 @@ CREATE TABLE user_iban
     iban   TEXT,
     userId BIGINT REFERENCES "user" (id)
 );
+
+CREATE TABLE user_token
+(
+    id                       BIGSERIAL PRIMARY KEY,
+    access_token             TEXT,
+    access_token_expiration  TIMESTAMP,
+    refresh_token            TEXT,
+    refresh_token_expiration TIMESTAMP,
+    scope                    TEXT,
+    provider                 TEXT,
+    userId                   BIGINT REFERENCES "user" (id)
+);

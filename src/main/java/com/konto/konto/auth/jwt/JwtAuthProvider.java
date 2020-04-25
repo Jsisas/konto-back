@@ -1,4 +1,4 @@
-package com.konto.konto.auth.lhv;
+package com.konto.konto.auth.jwt;
 
 import com.konto.konto.user.User;
 import com.nimbusds.jose.JOSEException;
@@ -13,9 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LhvAuthProvider implements AuthenticationProvider {
+public class JwtAuthProvider implements AuthenticationProvider {
 
-    @Value("${jwt.secret}")
+    @Value("${app.jwt-secret}")
     private String jwtSecret;
 
     @Override

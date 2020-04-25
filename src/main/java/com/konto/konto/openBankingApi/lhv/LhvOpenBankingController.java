@@ -19,8 +19,8 @@ public class LhvOpenBankingController {
     private final LhvOpenBankingService lhvOpenBankingService;
 
     @ResponseBody
-    @GetMapping("/lhv")
-    public ResponseEntity<OpenBankingAuth> lhvAuth(HttpServletRequest request, @RequestParam(value = "code") String code) {
+    @GetMapping("/redirect")
+    public ResponseEntity<OpenBankingAuth> lhvRedirect(HttpServletRequest request, @RequestParam(value = "code") String code) {
         String requestUrl = request.getRequestURL().toString();
         return lhvOpenBankingService.authenticate(code, requestUrl);
     }

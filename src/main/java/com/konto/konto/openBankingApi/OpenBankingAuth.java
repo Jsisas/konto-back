@@ -1,5 +1,6 @@
 package com.konto.konto.openBankingApi;
 
+import com.konto.konto.user.UserToken;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

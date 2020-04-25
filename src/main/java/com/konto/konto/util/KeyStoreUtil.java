@@ -1,4 +1,4 @@
-package com.konto.konto;
+package com.konto.konto.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ResourceUtils;
