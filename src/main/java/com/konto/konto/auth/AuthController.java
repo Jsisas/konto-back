@@ -6,10 +6,7 @@ import com.konto.konto.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @AllArgsConstructor
@@ -19,7 +16,7 @@ public class AuthController {
     private final JwtAuthService jwtAuthService;
 
     @ResponseBody
-    @GetMapping("/app")
+    @PostMapping("/app")
     public ResponseEntity<User> appAuth(@RequestBody User user) {
         return ResponseEntity.ok(jwtAuthService.authenticate(user));
     }
