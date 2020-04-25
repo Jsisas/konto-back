@@ -1,12 +1,14 @@
 package com.konto.konto.ping;
 
-import com.konto.konto.OpenBankingApi.lhv.LhvOpenBankingService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.konto.konto.openBankingApi.lhv.LhvOpenBankingService;
+import com.nimbusds.jose.JWSObject;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 public class PingController {
 
     private final LhvOpenBankingService lhvOpenBankingService;
+    private final ObjectMapper objectMapper;
 
     @ResponseBody
     @GetMapping("/authenticated")
-    public ResponseEntity<String> lhvAuth(HttpServletRequest request, @RequestParam(value = "code") String code) {
+    public ResponseEntity<String> lhvAuth(HttpServletRequest request) {
+
+        JWSObject jws = (JWSObject) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+
         return ResponseEntity.ok("ok");
     }
 }

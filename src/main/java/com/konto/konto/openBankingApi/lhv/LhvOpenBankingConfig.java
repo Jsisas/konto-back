@@ -1,7 +1,6 @@
-package com.konto.konto.OpenBankingApi.lhv;
+package com.konto.konto.openBankingApi.lhv;
 
-import com.konto.konto.keystore.KeyStoreUtil;
-import lombok.RequiredArgsConstructor;
+import com.konto.konto.KeyStoreUtil;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;

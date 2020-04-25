@@ -1,4 +1,4 @@
-package com.konto.konto.keystore;
+package com.konto.konto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.ResourceUtils;

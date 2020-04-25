@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.konto'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '14'
+sourceCompatibility = '11'
 
 configurations {
 	developmentOnly
@@ -39,6 +39,7 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'com.nimbusds:nimbus-jose-jwt:8.15'
 
 	//implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	//implementation 'org.liquibase:liquibase-core'
