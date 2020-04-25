@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konto.konto.openBankingApi.OpenBankingAuth;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import lombok.experimental.UtilityClass;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @UtilityClass
@@ -33,6 +35,15 @@ public class JwtUtil {
             return objectMapper.readValue(jws.getPayload().toString(), OpenBankingAuth.class);
         } catch (JsonProcessingException e) {
             throw new DataIntegrityViolationException(e.getMessage());
+        }
+    }
+
+    public boolean verifyJwtToken(JWSObject jwt, String secret){
+        try {
+            JWSVerifier verifier = new MACVerifier(secret);
+            return jwt.verify(verifier);
+        } catch (JOSEException ignored) {
+            return false;
         }
     }
 

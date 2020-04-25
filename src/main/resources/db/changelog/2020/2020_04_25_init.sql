@@ -3,6 +3,8 @@
 CREATE TABLE "user"
 (
     id    BIGSERIAL PRIMARY KEY,
+    email TEXT,
+    password TEXT,
     fname TEXT,
     lname TEXT
 );

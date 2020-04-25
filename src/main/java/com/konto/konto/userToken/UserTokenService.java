@@ -18,10 +18,15 @@ public class UserTokenService {
     private final CryptService cryptService;
 
     public void upsert(UserToken token){
+        if(token.getId() != null){
+            userTokenDao.update(cryptUserToken(token));
+        }else{
+            userTokenDao.insert(cryptUserToken(token));
+        }
+
         User user = AuthUtil.getCurrentUser();
         user.getTokens().removeIf((userToken) -> userToken.getProvider().equals(OpenBankingProvider.LHV));
         user.getTokens().add(token);
-        userTokenDao.upsert(cryptUserToken(token));
     }
 
     public List<UserToken> getByUserId(int userId){

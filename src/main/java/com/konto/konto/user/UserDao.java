@@ -14,29 +14,41 @@ public class UserDao {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
+    public User getUserByEmail(String email){
+        String sql = "SELECT * FROM \"user\" WHERE email=:email";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("email", email);
+
+        return namedJdbcTemplate.queryForObject(sql, namedParameters, new UserRowMapper());
+    }
+
     public User getUserById(int userId){
-        String sql = "SELECT * FROM user WHERE id=?";
+        String sql = "SELECT * FROM \"user\" WHERE id=?";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("id", userId);
 
         return namedJdbcTemplate.queryForObject(sql, namedParameters, new UserRowMapper());
     }
 
-    public void upsert(User user){
-        String sql = "";
-        SqlParameterSource namedParameters = new MapSqlParameterSource();
-        if(user.getId() == null){
-            sql = "INSERT INTO user(fname, lname) VALUES (:fname, :lname)";
-            namedParameters = new MapSqlParameterSource()
-                    .addValue("fname", user.getFname())
-                    .addValue("lname", user.getLname());
-        }else{
-            sql = "UPDATE user SET fname=:fname, lname=:lname WHERE id=:id";
-            namedParameters = new MapSqlParameterSource()
-                    .addValue("id", user.getId())
-                    .addValue("fname", user.getFname())
-                    .addValue("lname", user.getLname());
-        }
+    public void update(User user){
+        String sql = "UPDATE \"user\" SET fname=:fname, lname=:lname, email=:email, password=:password WHERE id=:id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("id", user.getId())
+                .addValue("fname", user.getFname())
+                .addValue("lname", user.getLname())
+                .addValue("email", user.getEmail())
+                .addValue("password", user.getPassword());
+
+        namedJdbcTemplate.update(sql, namedParameters);
+    }
+
+    public void insert(User user){
+        String sql = "INSERT INTO \"user\"(fname, lname, email, password) VALUES (:fname, :lname, :email, :password)";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("fname", user.getFname())
+                .addValue("lname", user.getLname())
+                .addValue("email", user.getEmail())
+                .addValue("password", user.getPassword());
         namedJdbcTemplate.update(sql, namedParameters);
     }
 }
