@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konto.konto.jwt.JwtUtil;
 import com.konto.konto.openBankingApi.OpenBankingAuth;
 import com.konto.konto.auth.lhv.LhvAuthProvider;
+import com.konto.konto.openBankingApi.lhv.api.auth.LhvApiAuthService;
 import com.nimbusds.jose.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,9 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -30,23 +25,12 @@ public class LhvOpenBankingService {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
-    private final RestTemplate lhvRestTemplate;
     private final LhvAuthProvider lhvAuthProvider;
     private final ObjectMapper objectMapper;
+    private final LhvApiAuthService lhvApiAuthService;
 
     public ResponseEntity<OpenBankingAuth> authenticate(String code, String redirectUrl){
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("client_id", LhvOpenBankingConfig.CLIENT_ID);
-        formData.add("code", code);
-        formData.add("grant_type", "authorization_code");
-        formData.add("redirect_uri", redirectUrl);
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
-
-        ResponseEntity<OpenBankingAuth> authResponse = lhvRestTemplate
-                .postForEntity("/oauth/token", request, OpenBankingAuth.class);
+        ResponseEntity<OpenBankingAuth> authResponse = lhvApiAuthService.authenticate(code, redirectUrl);
 
         if(authResponse.hasBody() && authResponse.getBody() != null){
             try {
@@ -65,5 +49,4 @@ public class LhvOpenBankingService {
         }
         return authResponse;
     }
-
 }

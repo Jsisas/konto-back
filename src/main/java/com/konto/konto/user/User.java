@@ -1,9 +1,12 @@
 package com.konto.konto.user;
 
+import com.konto.konto.openBankingApi.OpenBankingAuth;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
 
 @Getter
 @Setter

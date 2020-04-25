@@ -20,6 +20,13 @@ public class AuthController {
     private final LhvOpenBankingService lhvOpenBankingService;
 
     @ResponseBody
+    @GetMapping("/app")
+    public ResponseEntity<OpenBankingAuth> appAuth(HttpServletRequest request, @RequestParam(value = "code") String code) {
+        String requestUrl = request.getRequestURL().toString();
+        return lhvOpenBankingService.authenticate(code, requestUrl);
+    }
+
+    @ResponseBody
     @GetMapping("/lhv")
     public ResponseEntity<OpenBankingAuth> lhvAuth(HttpServletRequest request, @RequestParam(value = "code") String code) {
         String requestUrl = request.getRequestURL().toString();
