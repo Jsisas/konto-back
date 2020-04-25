@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping(path = "/api/auth")
@@ -17,7 +20,7 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/app")
-    public ResponseEntity<User> appAuth(@RequestBody User user) {
-        return ResponseEntity.ok(jwtAuthService.authenticate(user));
+    public ResponseEntity<User> appAuth(@RequestBody User user, HttpServletResponse res) {
+        return ResponseEntity.ok(jwtAuthService.authenticate(user, res));
     }
 }

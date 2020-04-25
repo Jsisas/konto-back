@@ -18,6 +18,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Service
@@ -32,7 +34,7 @@ public class JwtAuthService {
     private final UserService userService;
     private final ObjectMapper objectMapper;
 
-    public User authenticate(User user) {
+    public User authenticate(User user, HttpServletResponse res) {
         if(!validateUserLogin(user)){
             throw new DataIntegrityViolationException("Missing fields some fields while logging in");
         }
@@ -49,7 +51,7 @@ public class JwtAuthService {
                     .authenticate(new UsernamePasswordAuthenticationToken(user, jwsObject, authorities));
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
+            res.addCookie(new Cookie("token", jwsObject.serialize()));
         } catch (JsonProcessingException e) {
             throw new DataIntegrityViolationException(e.getMessage());
         }

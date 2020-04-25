@@ -9,14 +9,17 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import lombok.experimental.UtilityClass;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.text.ParseException;
 
 @UtilityClass
 public class JwtUtil {
 
     private final JWSAlgorithm algorithm = JWSAlgorithm.HS256;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @Value("${app.jwt-secret}")
+    public String jwtSecret;
 
     public JWSObject getJwsObject(String payload, String secret){
         try {
@@ -44,6 +47,14 @@ public class JwtUtil {
             return jwt.verify(verifier);
         } catch (JOSEException ignored) {
             return false;
+        }
+    }
+
+    public JWSObject parseToken(String token){
+        try {
+            return JWSObject.parse(token);
+        } catch (ParseException e) {
+            throw new DataIntegrityViolationException(e.getMessage());
         }
     }
 
