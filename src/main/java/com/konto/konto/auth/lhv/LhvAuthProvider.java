@@ -1,5 +1,6 @@
 package com.konto.konto.auth.lhv;
 
+import com.konto.konto.auth.User;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
@@ -20,13 +21,13 @@ public class LhvAuthProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) {
-        //String username = (String) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         JWSObject jwt = (JWSObject) authentication.getCredentials();
 
         try {
             JWSVerifier verifier = new MACVerifier(jwtSecret);
             if(jwt.verify(verifier)){
-                return new UsernamePasswordAuthenticationToken(null, jwt, authentication.getAuthorities());
+                return new UsernamePasswordAuthenticationToken(user, jwt, authentication.getAuthorities());
             }
         } catch (JOSEException ignored) {
 

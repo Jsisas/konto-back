@@ -41,8 +41,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'com.nimbusds:nimbus-jose-jwt:8.15'
 
-	//implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	//implementation 'org.liquibase:liquibase-core'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.postgresql:postgresql'
+	implementation 'org.liquibase:liquibase-core'
 }
 
 test {

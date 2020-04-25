@@ -1,0 +1,15 @@
+version: '3'
+services:
+  database:
+    image: "postgres"
+    network_mode: bridge
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: konto
+      POSTGRES_PASSWORD: konto
+      POSTGRES_DB: konto
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+volumes:
+  database-data:
