@@ -1,13 +1,17 @@
 package com.konto.konto.openBankingApi;
 
+import com.konto.konto.auth.AuthUtil;
 import com.konto.konto.openBankingApi.model.OpenBankingProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,6 +23,12 @@ public class OpenBankingController {
     @GetMapping("/info")
     public ResponseEntity<List<OpenBankingProvider>> getOpenBankingProviderInfo(){
         return ResponseEntity.ok(openBankingService.getOpenBankingProviderInfo());
+    }
+
+    @PostMapping("/token-exists")
+    public ResponseEntity<Map<String, Boolean>> currentUserTokenExists(@RequestBody OpenBankingProvider provider){
+        boolean tokenExists = OpenBankingUtil.getTokenByProvider(AuthUtil.getCurrentUser(), provider.getName()).getId() != null;
+        return ResponseEntity.ok(Map.of("exists", tokenExists));
     }
 
 }
