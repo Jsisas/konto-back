@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "e214e9ab-3ac3-4b6e-a6b5-75b2d48a83fd",
+		"name": "Konto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "/app",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "64dde9f6-d78a-43a2-a677-cf2b03888387",
+								"exec": [
+									"pm.environment.set('TOKEN', \"Bearer \" + pm.cookies.get('token'))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"joosep.sisas@gmail.com\",\n\t\"password\": \"asd123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/app",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"app"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication and login related endpoints",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "ping",
+			"item": [
+				{
+					"name": "/authenticated",
+					"protocolProfileBehavior": {
+						"disableUrlEncoding": false,
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/ping/authenticated",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"ping",
+								"authenticated"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"joosep.sisas@gmail.com\",\n\t\"password\": \"asd123\",\n\t\"fname\": \"Joosep\",\n\t\"lname\": \"Sisas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "openbanking",
+			"item": [
+				{
+					"name": "/info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTQsImVtYWlsIjoiam9vc2VwLnNpc2FzQGdtYWlsLmNvbSIsImZuYW1lIjoiSm9vc2VwIiwibG5hbWUiOiJTaXNhcyJ9.jsel2ZyPncssnAQFuSLGw6tlw27XC3hpY-BzOfscP2Q"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/openbanking/info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"openbanking",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/lhv/redirect?code=25gQ0V",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MTQsImVtYWlsIjoiam9vc2VwLnNpc2FzQGdtYWlsLmNvbSIsImZuYW1lIjoiSm9vc2VwIiwibG5hbWUiOiJTaXNhcyJ9.jsel2ZyPncssnAQFuSLGw6tlw27XC3hpY-BzOfscP2Q",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/openbanking/lhv/redirect?code=25gQ0V",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"openbanking",
+								"lhv",
+								"redirect"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "25gQ0V"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
