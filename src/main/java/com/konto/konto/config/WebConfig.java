@@ -2,6 +2,7 @@ package com.konto.konto.config;
 
 import com.konto.konto.auth.jwt.JwtAuthProvider;
 import com.konto.konto.auth.jwt.JwtAuthorizationFilter;
+import com.konto.konto.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class WebConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthProvider jwtAuthProvider;
+    private final UserService userService;
     @Value("${app.jwt-secret}")
     private String jwtSecret;
 
@@ -35,7 +37,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .fullyAuthenticated()
                 .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userService))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

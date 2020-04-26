@@ -23,7 +23,7 @@ public class UserDao {
     }
 
     public User getUserById(int userId){
-        String sql = "SELECT * FROM \"user\" WHERE id=?";
+        String sql = "SELECT * FROM \"user\" WHERE id=:id";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("id", userId);
 

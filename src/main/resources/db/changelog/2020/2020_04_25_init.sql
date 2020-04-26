@@ -3,27 +3,21 @@
 CREATE TABLE "user"
 (
     id    BIGSERIAL PRIMARY KEY,
-    email TEXT,
-    password TEXT,
-    fname TEXT,
-    lname TEXT
-);
-
-CREATE TABLE user_iban
-(
-    id     BIGSERIAL PRIMARY KEY,
-    iban   TEXT,
-    userId BIGINT REFERENCES "user" (id)
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    fname TEXT NOT NULL,
+    lname TEXT NOT NULL
 );
 
 CREATE TABLE user_token
 (
     id                       BIGSERIAL PRIMARY KEY,
-    access_token             TEXT,
-    access_token_expiration  TIMESTAMP,
-    refresh_token            TEXT,
-    refresh_token_expiration TIMESTAMP,
-    scope                    TEXT,
-    provider                 TEXT,
-    userId                   BIGINT REFERENCES "user" (id)
+    access_token             TEXT NOT NULL,
+    access_token_expiration  TIMESTAMP NOT NULL,
+    refresh_token            TEXT NOT NULL,
+    refresh_token_expiration TIMESTAMP NOT NULL,
+    scope                    TEXT NOT NULL,
+    provider                 TEXT NOT NULL,
+    userId                   BIGINT NOT NULL REFERENCES "user" (id),
+    unique (userId, provider)
 );

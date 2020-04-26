@@ -20,6 +20,13 @@ public class UserTokenDao {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
+    public List<UserToken> getById(int tokenId){
+        String sql = "SELECT * FROM user_token WHERE id=:id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("id", tokenId);
+        return namedJdbcTemplate.query(sql, namedParameters, new UserTokenRowMapper());
+    }
+
     public List<UserToken> getByUserId(int userId){
         String sql = "SELECT * FROM user_token WHERE userId=:userId";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
@@ -52,7 +59,7 @@ public class UserTokenDao {
                 .addValue("refreshToken", token.getRefreshToken())
                 .addValue("refreshTokenExpiration", token.getRefreshTokenExpiration())
                 .addValue("scope", token.getScope())
-                .addValue("provider", token.getProvider())
+                .addValue("provider", token.getProvider().name())
                 .addValue("userId", AuthUtil.getCurrentUser().getId());
     }
 

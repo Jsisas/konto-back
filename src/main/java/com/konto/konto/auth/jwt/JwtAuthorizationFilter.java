@@ -2,14 +2,17 @@ package com.konto.konto.auth.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.konto.konto.user.UserService;
 import com.konto.konto.util.JwtUtil;
 import com.konto.konto.user.User;
 import com.nimbusds.jose.JWSObject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,11 +26,13 @@ import java.util.Arrays;
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
+    private final UserService userService;
     private static final String AUTH_HEADER_NAME = "Authorization";
     private static final String AUTH_COOKIE_NAME = "token";
 
-    public JwtAuthorizationFilter(AuthenticationManager authManager) {
+    public JwtAuthorizationFilter(AuthenticationManager authManager, UserService userService) {
         super(authManager);
+        this.userService = userService;
     }
 
     @Override
@@ -61,8 +66,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             JWSObject jwt = JwtUtil.parseToken(token);
             String payload = jwt.getPayload().toString();
             User user = new ObjectMapper().readValue(payload, User.class);
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, jwt, new ArrayList<>());
+            if (user != null && user.getId() != null) {
+                User dbUser = userService.getUserById(user.getId());
+                return new UsernamePasswordAuthenticationToken(dbUser, jwt, new ArrayList<>());
             }
             return null;
         } catch (JsonProcessingException e) {

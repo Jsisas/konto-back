@@ -36,7 +36,7 @@ public class JwtAuthProvider implements AuthenticationProvider {
         JWSObject jwt = getJwtObject(dbUser);
 
         if (JwtUtil.verifyJwtToken(jwt, jwtSecret) && passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(user, jwt, authentication.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(dbUser, jwt, authentication.getAuthorities());
         }
         throw new BadCredentialsException("Password or token is not valid");
     }
