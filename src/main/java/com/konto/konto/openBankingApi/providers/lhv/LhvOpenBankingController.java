@@ -1,23 +1,19 @@
 package com.konto.konto.openBankingApi.providers.lhv;
 
 import com.konto.konto.openBankingApi.OpenBankingService;
-import com.konto.konto.openBankingApi.model.OpenBankingAuthResponse;
 import com.konto.konto.openBankingApi.model.OpenBankingProvider;
 import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
 import com.konto.konto.openBankingApi.providers.lhv.api.account.LhvApiAccountService;
-import lombok.AllArgsConstructor;
+import com.konto.konto.openBankingApi.providers.lhv.api.consent.LhvApiConsentService;
+import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.OpenBankingConsentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,10 +24,11 @@ public class LhvOpenBankingController {
     private String frontUrl;
     private final OpenBankingService openBankingService;
     private final LhvOpenBankingService lhvOpenBankingService;
+    private final LhvApiConsentService lhvApiConsentService;
     private final LhvApiAccountService lhvApiAccountService;
 
     @ResponseBody
-    @GetMapping("/redirect")
+    @GetMapping("/auth-redirect")
     public void lhvRedirect(HttpServletResponse response, HttpServletRequest request, @RequestParam(value = "code", required = false) String code) {
         if(code != null && !code.isEmpty()){
             String requestUrl = request.getRequestURL().toString();
@@ -44,6 +41,12 @@ public class LhvOpenBankingController {
                 response.setStatus(302);
             }
         }
+    }
+
+    @ResponseBody
+    @PostMapping("/consent")
+    public void lhvConsent(@RequestBody OpenBankingConsentRequest requestObj) {
+        lhvApiConsentService.getConsent(requestObj, "http://localhost:3000", "127.0.0.1");
     }
 
     @ResponseBody

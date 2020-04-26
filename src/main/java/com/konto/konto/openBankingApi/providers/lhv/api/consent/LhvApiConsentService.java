@@ -1,36 +1,55 @@
 package com.konto.konto.openBankingApi.providers.lhv.api.consent;
 
-import com.konto.konto.openBankingApi.model.OpenBankingAuthResponse;
-import com.konto.konto.openBankingApi.providers.lhv.api.LhvApiConfig;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.konto.konto.auth.AuthUtil;
+import com.konto.konto.crypt.CryptService;
+import com.konto.konto.openBankingApi.OpenBankingUtil;
+import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
+import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.OpenBankingConsentRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class LhvApiConsentService {
 
     private final RestTemplate lhvRestTemplate;
+    private final CryptService cryptService;
+    private final ObjectMapper objectMapper;
+    public ResponseEntity<String> getConsent(OpenBankingConsentRequest requestObj, String redirectUrl, String clientIp){
+        String cryptedAccessToken = OpenBankingUtil.getTokenByProvider(AuthUtil.getCurrentUser(), OpenBankingProviderName.LHV).getAccessToken();
+        String accessToken = cryptService.decrypt(cryptedAccessToken);
 
-    public ResponseEntity<OpenBankingAuthResponse> authenticate(String code, String redirectUrl){
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(accessToken);
+        headers.add("X-Request-ID", UUID.randomUUID().toString());
+        headers.add("PSU-IP-Address", clientIp);
+        headers.add("TPP-Redirect-URI", redirectUrl);
 
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("client_id", LhvApiConfig.CLIENT_ID);
-        formData.add("code", code);
-        formData.add("grant_type", "authorization_code");
-        formData.add("redirect_uri", redirectUrl);
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
+        String requestJson = null;
+        try {
+            requestJson = objectMapper.writeValueAsString(requestObj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        HttpEntity<String> request = new HttpEntity<>(requestJson, headers);
 
-        return lhvRestTemplate
-                .postForEntity("/oauth/token", request, OpenBankingAuthResponse.class);
+        ResponseEntity<String> exchange = lhvRestTemplate.exchange(
+                "/v1/consents",
+                HttpMethod.POST,
+                request,
+                String.class
+        );
+        return exchange;
     }
 
 }
