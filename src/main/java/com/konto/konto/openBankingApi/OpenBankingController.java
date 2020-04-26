@@ -27,8 +27,7 @@ public class OpenBankingController {
 
     @PostMapping("/token-exists")
     public ResponseEntity<Map<String, Boolean>> currentUserTokenExists(@RequestBody OpenBankingProvider provider){
-        boolean tokenExists = OpenBankingUtil.getTokenByProvider(AuthUtil.getCurrentUser(), provider.getName()).getId() != null;
-        return ResponseEntity.ok(Map.of("exists", tokenExists));
+        return ResponseEntity.ok(Map.of("exists", openBankingService.currentUserTokenExists(provider)));
     }
 
 }
