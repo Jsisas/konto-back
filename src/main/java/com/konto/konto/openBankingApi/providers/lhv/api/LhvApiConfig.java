@@ -1,4 +1,4 @@
-package com.konto.konto.openBankingApi.lhv.api;
+package com.konto.konto.openBankingApi.providers.lhv.api;
 
 import com.konto.konto.util.KeyStoreUtil;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;

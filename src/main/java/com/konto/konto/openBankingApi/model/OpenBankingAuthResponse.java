@@ -1,4 +1,4 @@
-package com.konto.konto.openBankingApi;
+package com.konto.konto.openBankingApi.model;
 
 import com.konto.konto.user.UserToken;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OpenBankingAuth {
+public class OpenBankingAuthResponse {
     String access_token;
     String token_type;
     String refresh_token;

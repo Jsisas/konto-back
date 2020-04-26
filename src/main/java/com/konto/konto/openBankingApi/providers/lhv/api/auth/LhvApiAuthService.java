@@ -1,7 +1,7 @@
-package com.konto.konto.openBankingApi.lhv.api.auth;
+package com.konto.konto.openBankingApi.providers.lhv.api.auth;
 
-import com.konto.konto.openBankingApi.OpenBankingAuth;
-import com.konto.konto.openBankingApi.lhv.api.LhvApiConfig;
+import com.konto.konto.openBankingApi.model.OpenBankingAuthResponse;
+import com.konto.konto.openBankingApi.providers.lhv.api.LhvApiConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +18,7 @@ public class LhvApiAuthService {
 
     private final RestTemplate lhvRestTemplate;
 
-    public ResponseEntity<OpenBankingAuth> authenticate(String code, String redirectUrl){
+    public ResponseEntity<OpenBankingAuthResponse> authenticate(String code, String redirectUrl){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -30,7 +30,7 @@ public class LhvApiAuthService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
 
         return lhvRestTemplate
-                .postForEntity("/oauth/token", request, OpenBankingAuth.class);
+                .postForEntity("/oauth/token", request, OpenBankingAuthResponse.class);
     }
 
 }

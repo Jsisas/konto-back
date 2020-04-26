@@ -2,7 +2,7 @@ package com.konto.konto.userToken;
 
 import com.konto.konto.auth.AuthUtil;
 import com.konto.konto.crypt.CryptService;
-import com.konto.konto.openBankingApi.OpenBankingProvider;
+import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
 import com.konto.konto.user.User;
 import com.konto.konto.user.UserToken;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class UserTokenService {
         }
 
         User user = AuthUtil.getCurrentUser();
-        user.getTokens().removeIf((userToken) -> userToken.getProvider().equals(OpenBankingProvider.LHV));
+        user.getTokens().removeIf((userToken) -> userToken.getProvider().equals(OpenBankingProviderName.LHV));
         user.getTokens().add(token);
     }
 

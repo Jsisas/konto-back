@@ -2,13 +2,12 @@ package com.konto.konto.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.konto.konto.openBankingApi.OpenBankingAuth;
+import com.konto.konto.openBankingApi.model.OpenBankingAuthResponse;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -32,10 +31,10 @@ public class JwtUtil {
 
     }
 
-    public OpenBankingAuth getUserOpenBankingAuth(){
+    public OpenBankingAuthResponse getUserOpenBankingAuth(){
         JWSObject jws = (JWSObject) SecurityContextHolder.getContext().getAuthentication().getCredentials();
         try {
-            return objectMapper.readValue(jws.getPayload().toString(), OpenBankingAuth.class);
+            return objectMapper.readValue(jws.getPayload().toString(), OpenBankingAuthResponse.class);
         } catch (JsonProcessingException e) {
             throw new DataIntegrityViolationException(e.getMessage());
         }

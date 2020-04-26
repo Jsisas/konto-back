@@ -1,9 +1,7 @@
 package com.konto.konto.userToken;
 
-import com.konto.konto.openBankingApi.OpenBankingProvider;
-import com.konto.konto.user.User;
+import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
 import com.konto.konto.user.UserToken;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -18,7 +16,7 @@ public class UserTokenRowMapper implements RowMapper<UserToken> {
         student.setRefreshToken(rs.getString("refresh_token"));
         student.setRefreshTokenExpiration(rs.getTimestamp("refresh_token_expiration").toLocalDateTime());
         student.setScope(rs.getString("scope"));
-        student.setProvider(OpenBankingProvider.valueOf(rs.getString("provider")));
+        student.setProvider(OpenBankingProviderName.valueOf(rs.getString("provider")));
         return student;
     }
 }

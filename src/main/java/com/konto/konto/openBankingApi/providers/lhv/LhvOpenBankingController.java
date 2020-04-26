@@ -1,6 +1,6 @@
-package com.konto.konto.openBankingApi.lhv;
+package com.konto.konto.openBankingApi.providers.lhv;
 
-import com.konto.konto.openBankingApi.OpenBankingAuth;
+import com.konto.konto.openBankingApi.model.OpenBankingAuthResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ public class LhvOpenBankingController {
 
     @ResponseBody
     @GetMapping("/redirect")
-    public ResponseEntity<OpenBankingAuth> lhvRedirect(HttpServletRequest request, @RequestParam(value = "code") String code) {
+    public ResponseEntity<OpenBankingAuthResponse> lhvRedirect(HttpServletRequest request, @RequestParam(value = "code") String code) {
         String requestUrl = request.getRequestURL().toString();
         return lhvOpenBankingService.authenticate(code, requestUrl);
     }

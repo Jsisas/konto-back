@@ -1,7 +1,6 @@
 package com.konto.konto.auth;
 
 import com.konto.konto.auth.jwt.JwtAuthService;
-import com.konto.konto.openBankingApi.OpenBankingAuth;
 import com.konto.konto.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller

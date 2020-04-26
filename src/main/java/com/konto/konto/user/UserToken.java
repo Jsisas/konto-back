@@ -1,14 +1,13 @@
 package com.konto.konto.user;
 
-import com.konto.konto.openBankingApi.OpenBankingAuth;
-import com.konto.konto.openBankingApi.OpenBankingProvider;
+import com.konto.konto.openBankingApi.model.OpenBankingAuthResponse;
+import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 
 @Getter
 @Setter
@@ -22,9 +21,9 @@ public class UserToken {
     private String refreshToken;
     private LocalDateTime refreshTokenExpiration;
     private String scope;
-    private OpenBankingProvider provider;
+    private OpenBankingProviderName provider;
 
-    public UserToken(OpenBankingAuth oauthToken, OpenBankingProvider provider){
+    public UserToken(OpenBankingAuthResponse oauthToken, OpenBankingProviderName provider){
         this.accessToken = oauthToken.getAccess_token();
         this.accessTokenExpiration = LocalDateTime.now().plusSeconds(oauthToken.getExpires_in());
         this.refreshToken = oauthToken.getRefresh_token();

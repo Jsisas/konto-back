@@ -1,7 +1,7 @@
 package com.konto.konto.ping;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.konto.konto.openBankingApi.lhv.LhvOpenBankingService;
+import com.konto.konto.openBankingApi.providers.lhv.LhvOpenBankingService;
 import com.nimbusds.jose.JWSObject;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
