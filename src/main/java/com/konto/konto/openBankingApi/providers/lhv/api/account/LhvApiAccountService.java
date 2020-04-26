@@ -18,7 +18,6 @@ import java.util.UUID;
 public class LhvApiAccountService {
 
     private final RestTemplate lhvRestTemplate;
-    private final UserService userService;
     private final CryptService cryptService;
 
     public ResponseEntity<String> getBasicAccounts(){
