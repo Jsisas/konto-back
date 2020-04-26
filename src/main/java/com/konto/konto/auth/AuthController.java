@@ -20,7 +20,7 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/app")
-    public ResponseEntity<String> appAuth(@RequestBody User user, HttpServletResponse res) {
+    public ResponseEntity<User> appAuth(@RequestBody User user, HttpServletResponse res) {
         return ResponseEntity.ok(jwtAuthService.authenticate(user, res));
     }
 }

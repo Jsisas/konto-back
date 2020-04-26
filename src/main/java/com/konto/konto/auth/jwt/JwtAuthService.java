@@ -1,8 +1,6 @@
 package com.konto.konto.auth.jwt;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.konto.konto.util.JwtUtil;
 import com.konto.konto.user.User;
 import com.konto.konto.user.UserService;
 import com.konto.konto.userToken.UserTokenService;
@@ -33,7 +31,7 @@ public class JwtAuthService {
     private final UserService userService;
     private final ObjectMapper objectMapper;
 
-    public String authenticate(User user, HttpServletResponse res) {
+    public User authenticate(User user, HttpServletResponse res) {
         if (!validateUserLogin(user)) {
             throw new DataIntegrityViolationException("Missing fields some fields while logging in");
         }
@@ -45,7 +43,7 @@ public class JwtAuthService {
         String jwtToken = ((JWSObject) authenticationToken.getCredentials()).serialize();
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         res.addCookie(new Cookie("token", jwtToken));
-        return jwtToken;
+        return (User) authenticationToken.getPrincipal();
     }
 
     private boolean validateUserLogin(User user) {
