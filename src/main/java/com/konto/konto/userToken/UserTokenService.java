@@ -22,7 +22,8 @@ public class UserTokenService {
     public void upsert(UserToken token) {
         User user = AuthUtil.getCurrentUser();
         UserToken storedToken = OpenBankingUtil.getTokenByProvider(user, token.getProvider());
-        if (storedToken != null && storedToken.getId() != null) {
+        if (storedToken != null) {
+            token.setId(storedToken.getId());
             userTokenDao.update(cryptUserToken(token));
         } else {
             userTokenDao.insert(cryptUserToken(token));
