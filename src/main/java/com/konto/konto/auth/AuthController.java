@@ -5,6 +5,7 @@ import com.konto.konto.openBankingApi.OpenBankingAuth;
 import com.konto.konto.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthController {
 
     private final JwtAuthService jwtAuthService;
+    private final PasswordEncoder passwordEncoder;
 
     @ResponseBody
     @PostMapping("/app")
-    public ResponseEntity<User> appAuth(@RequestBody User user, HttpServletResponse res) {
+    public ResponseEntity<String> appAuth(@RequestBody User user, HttpServletResponse res) {
         return ResponseEntity.ok(jwtAuthService.authenticate(user, res));
     }
 }

@@ -1,4 +1,4 @@
-package com.konto.konto.jwt;
+package com.konto.konto.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,19 +7,19 @@ import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.text.ParseException;
 
+@Slf4j
 @UtilityClass
 public class JwtUtil {
 
     private final JWSAlgorithm algorithm = JWSAlgorithm.HS256;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    @Value("${app.jwt-secret}")
-    public String jwtSecret;
 
     public JWSObject getJwsObject(String payload, String secret){
         try {
@@ -54,6 +54,7 @@ public class JwtUtil {
         try {
             return JWSObject.parse(token);
         } catch (ParseException e) {
+            log.info("Invalid token: {}", token);
             throw new DataIntegrityViolationException(e.getMessage());
         }
     }
