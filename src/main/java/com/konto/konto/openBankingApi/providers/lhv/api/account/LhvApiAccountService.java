@@ -22,8 +22,7 @@ public class LhvApiAccountService {
     private final CryptService cryptService;
 
     public ResponseEntity<String> getBasicAccounts(){
-        User user = userService.getUserById(AuthUtil.getCurrentUser().getId());
-        String cryptedAccessToken = OpenBankingUtil.getTokenByProvider(user, OpenBankingProviderName.LHV).getAccessToken();
+        String cryptedAccessToken = OpenBankingUtil.getTokenByProvider(AuthUtil.getCurrentUser(), OpenBankingProviderName.LHV).getAccessToken();
         String accessToken = cryptService.decrypt(cryptedAccessToken);
 
         HttpHeaders headers = new HttpHeaders();
