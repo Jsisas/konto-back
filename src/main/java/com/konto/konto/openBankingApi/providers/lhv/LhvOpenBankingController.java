@@ -5,7 +5,8 @@ import com.konto.konto.openBankingApi.model.OpenBankingProvider;
 import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
 import com.konto.konto.openBankingApi.providers.lhv.api.account.LhvApiAccountService;
 import com.konto.konto.openBankingApi.providers.lhv.api.consent.LhvApiConsentService;
-import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.OpenBankingConsentRequest;
+import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.request.OpenBankingConsentRequest;
+import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.response.ConsentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,14 @@ public class LhvOpenBankingController {
 
     @ResponseBody
     @PostMapping("/consent")
-    public void lhvConsent(@RequestBody OpenBankingConsentRequest requestObj) {
-        lhvApiConsentService.getConsent(requestObj, "http://localhost:3000", "127.0.0.1");
+    public ResponseEntity<ConsentResponse> lhvConsent(@RequestBody OpenBankingConsentRequest requestObj) {
+        return lhvApiConsentService.getConsent(requestObj, "http://localhost:3000", "127.0.0.1");
+    }
+
+    @ResponseBody
+    @GetMapping("/consent/{consentId}/status")
+    public ResponseEntity<String> lhvConsent(@PathVariable String consentId) {
+        return lhvApiConsentService.getConsentStatus(consentId);
     }
 
     @ResponseBody

@@ -1,4 +1,4 @@
-package com.konto.konto.openBankingApi.providers.lhv.api.consent.model;
+package com.konto.konto.openBankingApi.providers.lhv.api.consent.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
