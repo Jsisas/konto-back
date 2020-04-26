@@ -31,7 +31,7 @@ public class LhvOpenBankingController {
     @ResponseBody
     @GetMapping("/auth-redirect")
     public void lhvRedirect(HttpServletResponse response, HttpServletRequest request, @RequestParam(value = "code", required = false) String code) {
-        if(code != null && !code.isEmpty()){
+        if (code != null && !code.isEmpty()) {
             String requestUrl = request.getRequestURL().toString();
             lhvOpenBankingService.authenticate(code, requestUrl);
             if (openBankingService.currentUserTokenExists(new OpenBankingProvider(OpenBankingProviderName.LHV, openBankingService.getBankRedirectUrl(OpenBankingProviderName.LHV)))) {
@@ -46,8 +46,13 @@ public class LhvOpenBankingController {
 
     @ResponseBody
     @PostMapping("/consent")
-    public ResponseEntity<ConsentResponse> lhvConsent(@RequestBody OpenBankingConsentRequest requestObj) {
-        return lhvApiConsentService.getConsent(requestObj, "http://localhost:3000", "127.0.0.1");
+    public void lhvConsent(HttpServletResponse res, @RequestBody OpenBankingConsentRequest requestObj) {
+        ResponseEntity<ConsentResponse> consent = lhvApiConsentService.getConsent(requestObj, "http://localhost:3000", "127.0.0.1");
+        if(consent != null && consent.getBody() != null){
+            String consentRedirectLink = consent.getBody().get_links().getScaRedirect().getHref();
+            res.setHeader("Location", consentRedirectLink);
+            res.setStatus(302);
+        }
     }
 
     @ResponseBody

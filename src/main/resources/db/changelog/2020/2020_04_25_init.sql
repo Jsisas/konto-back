@@ -21,3 +21,11 @@ CREATE TABLE user_token
     userId                   BIGINT NOT NULL REFERENCES "user" (id),
     unique (userId, provider)
 );
+
+CREATE TABLE user_consent
+(
+    id                       BIGSERIAL PRIMARY KEY,
+    consentId                TEXT NOT NULL,
+    userId                   BIGINT NOT NULL REFERENCES "user" (id),
+    unique (userId, consentId)
+);
