@@ -1,10 +1,12 @@
 package com.konto.konto.openBankingApi.providers.lhv;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konto.konto.openBankingApi.OpenBankingService;
-import com.konto.konto.openBankingApi.model.OpenBankingProvider;
-import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
 import com.konto.konto.openBankingApi.providers.lhv.api.account.LhvApiAccountService;
+import com.konto.konto.openBankingApi.providers.lhv.api.account.response.AccountBasicResponse;
 import com.konto.konto.openBankingApi.providers.lhv.api.consent.LhvApiConsentService;
+import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.request.OpenBankingAccount;
 import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.request.OpenBankingConsentRequest;
 import com.konto.konto.openBankingApi.providers.lhv.api.consent.model.response.ConsentResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class LhvOpenBankingController {
 
     @Value("${app.front.url}")
     private String frontUrl;
+    private final ObjectMapper objectMapper;
     private final OpenBankingService openBankingService;
     private final LhvOpenBankingService lhvOpenBankingService;
     private final LhvApiConsentService lhvApiConsentService;
@@ -34,24 +39,17 @@ public class LhvOpenBankingController {
         if (code != null && !code.isEmpty()) {
             String requestUrl = request.getRequestURL().toString();
             lhvOpenBankingService.authenticate(code, requestUrl);
-            if (openBankingService.currentUserTokenExists(new OpenBankingProvider(OpenBankingProviderName.LHV, openBankingService.getBankRedirectUrl(OpenBankingProviderName.LHV)))) {
-                response.setHeader("Location", frontUrl + "?auth=success");
-                response.setStatus(302);
-            } else {
-                response.setHeader("Location", frontUrl + "?auth=failed");
+
+            ResponseEntity<ConsentResponse> consent = lhvApiConsentService.getConsent(
+                    new OpenBankingConsentRequest(),
+                    frontUrl + "?consent=success",
+                    request.getRemoteAddr()
+            );
+            if (consent != null && consent.getBody() != null) {
+                String consentRedirectLink = consent.getBody().get_links().getScaRedirect().getHref();
+                response.setHeader("Location", consentRedirectLink);
                 response.setStatus(302);
             }
-        }
-    }
-
-    @ResponseBody
-    @PostMapping("/consent")
-    public void lhvConsent(HttpServletResponse res, @RequestBody OpenBankingConsentRequest requestObj) {
-        ResponseEntity<ConsentResponse> consent = lhvApiConsentService.getConsent(requestObj, "http://localhost:3000", "127.0.0.1");
-        if(consent != null && consent.getBody() != null){
-            String consentRedirectLink = consent.getBody().get_links().getScaRedirect().getHref();
-            res.setHeader("Location", consentRedirectLink);
-            res.setStatus(302);
         }
     }
 
@@ -60,11 +58,4 @@ public class LhvOpenBankingController {
     public ResponseEntity<String> lhvConsent(@PathVariable String consentId) {
         return lhvApiConsentService.getConsentStatus(consentId);
     }
-
-    @ResponseBody
-    @GetMapping("/accounts-list")
-    public ResponseEntity<String> accountsList() {
-        return lhvApiAccountService.getBasicAccounts();
-    }
-
 }

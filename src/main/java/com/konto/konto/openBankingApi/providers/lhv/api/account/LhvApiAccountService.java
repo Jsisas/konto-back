@@ -4,8 +4,7 @@ import com.konto.konto.auth.AuthUtil;
 import com.konto.konto.crypt.CryptService;
 import com.konto.konto.openBankingApi.OpenBankingUtil;
 import com.konto.konto.openBankingApi.model.OpenBankingProviderName;
-import com.konto.konto.user.User;
-import com.konto.konto.user.UserService;
+import com.konto.konto.openBankingApi.providers.lhv.api.account.response.AccountBasicResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class LhvApiAccountService {
     private final RestTemplate lhvRestTemplate;
     private final CryptService cryptService;
 
-    public ResponseEntity<String> getBasicAccounts(){
+    public ResponseEntity<AccountBasicResponse> getBasicAccounts(){
         String cryptedAccessToken = OpenBankingUtil.getTokenByProvider(AuthUtil.getCurrentUser(), OpenBankingProviderName.LHV).getAccessToken();
         String accessToken = cryptService.decrypt(cryptedAccessToken);
 
@@ -34,7 +33,7 @@ public class LhvApiAccountService {
                 "/v1/accounts-list",
                 HttpMethod.GET,
                 request,
-                String.class
+                AccountBasicResponse.class
                 );
     }
 

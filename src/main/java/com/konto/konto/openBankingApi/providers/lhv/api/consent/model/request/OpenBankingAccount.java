@@ -1,13 +1,15 @@
 package com.konto.konto.openBankingApi.providers.lhv.api.consent.model.request;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenBankingAccount {
+    private String name;
     private String iban;
+    private String currency;
 }
