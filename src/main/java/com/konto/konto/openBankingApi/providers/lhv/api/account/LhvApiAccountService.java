@@ -24,7 +24,7 @@ public class LhvApiAccountService {
         String accessToken = cryptService.decrypt(cryptedAccessToken);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(accessToken);
         headers.add("X-Request-ID", UUID.randomUUID().toString());
 

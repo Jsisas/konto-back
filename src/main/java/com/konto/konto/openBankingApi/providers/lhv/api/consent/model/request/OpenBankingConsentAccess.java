@@ -10,6 +10,6 @@ import java.util.List;
 @Setter
 public class OpenBankingConsentAccess {
     private String availableAccounts = "allAccountsWithBalances";
-    private List<OpenBankingAccount> balances;
-    private List<OpenBankingAccount> transactions;
+    private List<OpenBankingConsentAccount> balances;
+    private List<OpenBankingConsentAccount> transactions;
 }

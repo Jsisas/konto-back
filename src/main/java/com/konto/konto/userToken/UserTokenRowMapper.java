@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserTokenRowMapper implements RowMapper<UserToken> {
+class UserTokenRowMapper implements RowMapper<UserToken> {
     public UserToken mapRow(ResultSet rs, int rowNum) throws SQLException {
         UserToken student = new UserToken();
         student.setId(rs.getInt("id"));

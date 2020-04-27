@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class UserTokenDao {
+class UserTokenDao {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
-    public List<UserToken> getById(int tokenId){
+    public UserToken getById(int tokenId){
         String sql = "SELECT * FROM user_token WHERE id=:id";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("id", tokenId);
-        return namedJdbcTemplate.query(sql, namedParameters, new UserTokenRowMapper());
+        return namedJdbcTemplate.queryForObject(sql, namedParameters, new UserTokenRowMapper());
     }
 
     public List<UserToken> getByUserId(int userId){

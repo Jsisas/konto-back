@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Repository
 @RequiredArgsConstructor
-public class UserDao {
+class UserDao {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
