@@ -1,4 +1,7 @@
 # KONTO
+It's an application that will help you manage your expenses by taking your accounts, balances and transactions with your permissions from your bank automatically. MVP is focused on Estonian banks via OpenBanking API.
+
+
 ## Build
 1. `./gradlew build`
 
